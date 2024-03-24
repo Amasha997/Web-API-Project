@@ -1,5 +1,5 @@
 const express = require('express')
-
+require('dotenv').config()
 const app = express()
 
 app.use(express.json())
@@ -8,11 +8,11 @@ const connectDB = require('./connectMongo')
 
 connectDB()
 
-const BookModel = require('./models/book.model')
+const ProductModel = require('./models/product.model')
 
-app.get('/api/v1/books', async (req, res) => {
+app.get('/api/v1/products', async (req, res) => {
     try {
-        const data = await BookModel.find()
+        const data = await ProductModel.find()
         return res.status(200).json({
             msg: 'Ok',
             data
@@ -25,9 +25,9 @@ app.get('/api/v1/books', async (req, res) => {
     }
 })
 
-app.get('/api/v1/books/:id', async (req, res) => {
+app.get('/api/v1/products/:id', async (req, res) => {
     try {
-        const data = await BookModel.findById(req.params.id)
+        const data = await ProductModel.findById(req.params.id)
 
         if (data) {
             return res.status(200).json({
@@ -47,13 +47,13 @@ app.get('/api/v1/books/:id', async (req, res) => {
     }
 })
 
-app.post('/api/v1/books', async (req, res) => {
+app.post('/api/v1/products', async (req, res) => {
     try {
-        const { name, author, price, description } = req.body
-        const book = new BookModel({
-            name, author, price, description
+        const { name, image, description, size,  price, color } = req.body
+        const product = new ProductModel({
+            name, image, description, size,  price, color
         })
-        const data = await book.save()
+        const data = await product.save()
         return res.status(200).json({
             msg: 'Ok',
             data
@@ -66,13 +66,13 @@ app.post('/api/v1/books', async (req, res) => {
     }
 })
 
-app.put('/api/v1/books/:id', async (req, res) => {
+app.put('/api/v1/products/:id', async (req, res) => {
     try {
-        const { name, author, price, description } = req.body
+        const { name, image, description, size,  price, color } = req.body
         const { id } = req.params
 
-        const data = await BookModel.findByIdAndUpdate(id, {
-            name, author, price, description
+        const data = await ProductModel.findByIdAndUpdate(id, {
+            name, image, description, size,  price, color
         }, { new: true })
         return res.status(200).json({
             msg: 'Ok',
@@ -86,9 +86,9 @@ app.put('/api/v1/books/:id', async (req, res) => {
     }
 })
 
-app.delete('/api/v1/books/:id', async (req, res) => {
+app.delete('/api/v1/products/:id', async (req, res) => {
     try {
-        await BookModel.findByIdAndDelete(req.params.id)
+        await ProductModel.findByIdAndDelete(req.params.id)
         return res.status(200).json({
             msg: 'Ok',
             data
@@ -101,6 +101,8 @@ app.delete('/api/v1/books/:id', async (req, res) => {
     }
 })
 
-app.listen(8080, () => {
-    console.log("Server is running on port 8080")
+const PORT = process.env.PORT
+
+app.listen(PORT, () => {
+    console.log("Server is running on port" + PORT)
 })
