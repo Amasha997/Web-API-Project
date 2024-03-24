@@ -49,9 +49,9 @@ app.get('/api/v1/products/:id', async (req, res) => {
 
 app.post('/api/v1/products', async (req, res) => {
     try {
-        const { name, image, description, size,  price, color } = req.body
+        const { name, category, image, description, size,  price, color } = req.body
         const product = new ProductModel({
-            name, image, description, size,  price, color
+            name, category, image, description, size,  price, color
         })
         const data = await product.save()
         return res.status(200).json({
@@ -68,11 +68,11 @@ app.post('/api/v1/products', async (req, res) => {
 
 app.put('/api/v1/products/:id', async (req, res) => {
     try {
-        const { name, image, description, size,  price, color } = req.body
+        const { name, category, image, description, size,  price, color } = req.body
         const { id } = req.params
 
         const data = await ProductModel.findByIdAndUpdate(id, {
-            name, image, description, size,  price, color
+            name, category, image, description, size,  price, color
         }, { new: true })
         return res.status(200).json({
             msg: 'Ok',
